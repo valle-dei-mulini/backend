@@ -4,6 +4,9 @@ RUN npm install
 RUN npm install -g nodemon
 # COPY --from=build ./node_modules ./node_modules
 COPY . .
+ENV WEATHER_API_KEY=3815f2d2474d4bf0fd7527bd628f45cb
+ENV FRONTEND_URL=http://localhost:3000
+ENV DATABASE_URL=postgres://localhost:5432/postgres
 EXPOSE 5000
 CMD ["sh", "start.sh"]
 
