@@ -32,6 +32,8 @@ jobs:
     # if: github.event.pull_request.merged == true
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
+    outputs:
+      critical: ${{ steps.critical.outputs.test }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -81,14 +83,9 @@ jobs:
           format: 'template'
           template: '@templates/critical.tpl'
           output: 'trivy-results.json'
-          
-  update_badge:
-    needs: ["push_to_registry"]
-    name: Update vulnerabilities badge
-    runs-on: ubuntu-latest
-    steps:
+      
       - name: Get critical vulnerabilities number
-        run: "export CRITICAL=$(cat ${{ needs.push_to_registry.steps.critical.output }})"
+        run: "export CRITICAL=$(cat trivy-results.json)"
       - name: Create Lines-of-Code-Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
