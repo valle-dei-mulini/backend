@@ -77,8 +77,27 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
-          format: 'json'
+          format: 'template'
+          template: '{{- $critical := 0 }}{{- range . }}{{- range .Vulnerabilities }}{{- if  eq .Severity "CRITICAL" }}{{- $critical = add $critical 1 }}{{- end }}{{- end}}{{- end}}{{ $critical }}'
           output: 'trivy-results.json'
+          
+  update_badge:
+    needs: ["push_to_registry"]
+    name: Update vulnerabilities badge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get critical vulnerabilities number
+        run: |
+          echo "::set-env name=CRITICAL::$(cat ${{ jobs.push_to_registry.steps.critical.output }})"
+      - name: Create Lines-of-Code-Badge
+        uses: schneegans/dynamic-badges-action@v1.0.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 9562e76d82177e8593b2a0769e1e5379
+          filename: test.json
+          label: Critical Vulnerabilities
+          message: ${{ env.CRITICAL }}
+          color: red
 
   update_tag:
     needs: ["push_to_registry"]
