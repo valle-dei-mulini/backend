@@ -85,8 +85,8 @@ jobs:
           output: 'trivy-results.json'
       
       - name: Get critical vulnerabilities number
-        run: "export CRITICAL=$(cat trivy-results.json)"
-      - name: Create Lines-of-Code-Badge
+        run: echo "CRITICAl=$(cat trivy-results.json)" >> $GITHUB_ENV
+      - name: Create Critical-Vulnerabilities-Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
