@@ -79,7 +79,7 @@ jobs:
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
           format: 'template'
-          template: '{{- $critical := 0 }}{{- range . }}{{- range .Vulnerabilities }}{{- if  eq .Severity "CRITICAL" }}{{- $critical = add $critical 1 }}{{- end }}{{- end}}{{- end}}{{ $critical }}'
+          template: '@templates/critical.tpl'
           output: 'trivy-results.json'
           
   update_badge:
