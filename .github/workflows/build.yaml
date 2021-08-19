@@ -77,13 +77,9 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
-          format: 'table'
-          output: 'trivy-results.sarif'
+          format: 'json'
+          output: 'trivy-results.json'
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: 'trivy-results.sarif'
   update_tag:
     needs: ["push_to_registry"]
     name: Update backend tag in helm chart
