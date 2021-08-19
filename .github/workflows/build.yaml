@@ -29,7 +29,7 @@ env:
 jobs:
   push_to_registry:
     # this job will only run if the PR has been merged
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
@@ -86,7 +86,6 @@ jobs:
           sarif_file: 'trivy-results.sarif'
   update_tag:
     needs: ["push_to_registry"]
-    if: github.event.pull_request.merged == true
     name: Update backend tag in helm chart
     runs-on: ubuntu-latest
     steps: 
