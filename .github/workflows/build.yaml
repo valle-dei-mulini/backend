@@ -88,8 +88,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get critical vulnerabilities number
-        run: |
-          echo "::set-env name=CRITICAL::$(cat ${{ needs.push_to_registry.steps.critical.output }})"
+        run: "export CRITICAL=$(cat ${{ needs.push_to_registry.steps.critical.output }})"
       - name: Create Lines-of-Code-Badge
         uses: schneegans/dynamic-badges-action@v1.0.0
         with:
