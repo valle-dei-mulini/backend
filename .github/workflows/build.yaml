@@ -18,6 +18,9 @@ name: Publish Docker image
 on:
   pull_request:
     types: [ "closed" ]
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 env:
@@ -69,6 +72,18 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
+          format: 'table'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: 'trivy-results.sarif'
   update_tag:
     needs: ["push_to_registry"]
     if: github.event.pull_request.merged == true
