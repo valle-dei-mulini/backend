@@ -1,5 +1,5 @@
 ## Backend applications for cool startup
-[Vulnerablities](https://img.shields.io/snyk/vulnerabilities/github/valle-dei-mulini/backend)
+![Vulnerablities](https://img.shields.io/snyk/vulnerabilities/github/valle-dei-mulini/backend)
 
 ## :floppy_disk: Setup - Backend
 
