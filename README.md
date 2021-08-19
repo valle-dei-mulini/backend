@@ -1,6 +1,6 @@
 ## Backend applications for cool startup
 ![Vulnerablities](https://img.shields.io/snyk/vulnerabilities/github/valle-dei-mulini/backend)
-
+![Critical Vulnerabilities](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/rufusnufus/9562e76d82177e8593b2a0769e1e5379/raw/test.json)
 ## :floppy_disk: Setup - Backend
 
 * Install dependencies using `npm i`
