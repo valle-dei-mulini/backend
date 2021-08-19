@@ -75,6 +75,7 @@ jobs:
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        id: critical
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
           format: 'template'
