@@ -64,7 +64,9 @@ jobs:
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}, ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
+            ${{ env.REGISTRY }}/${{ github.event.repository.name }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       
