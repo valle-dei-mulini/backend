@@ -51,19 +51,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
       
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          push: true
+          push: false
           tags: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
@@ -74,27 +68,7 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        id: critical
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.event.repository.name }}:ci-${{ github.sha}}
-          format: 'template'
-          template: '@templates/critical.tpl'
-          output: 'trivy-results.json'
-      
-      - name: Get critical vulnerabilities number
-        run: echo "CRITICAl=$(cat trivy-results.json)" >> $GITHUB_ENV
-      - name: Create Critical-Vulnerabilities-Badge
-        uses: schneegans/dynamic-badges-action@v1.0.0
-        with:
-          auth: ${{ secrets.GIST_SECRET }}
-          gistID: 9562e76d82177e8593b2a0769e1e5379
-          filename: test.json
-          label: Critical Vulnerabilities
-          message: ${{ env.CRITICAL }}
-          color: red
+
 
   update_tag:
     needs: ["push_to_registry"]
